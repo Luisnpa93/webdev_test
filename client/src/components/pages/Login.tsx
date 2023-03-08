@@ -1,19 +1,40 @@
-import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 
-const Login = () => {
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Perform authentication logic here, e.g. call an API endpoint
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    const encodedInfo = btoa(`${email}:${password}`);
+    
+    const headers = new Headers();
+    headers.set('Authorization', `Basic ${encodedInfo}`);
+    headers.set('Content-Type', 'application/json');
+
+    const response = await fetch('http://localhost:3000/auth/login', {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({ email, password })
+    });
+
+    console.log(response);
+    if (response.ok) {
+      const accessToken = await response.text();
+      navigate('/empty-page')
+    } else {
+      alert('Login failed');
+    }
   };
 
   return (
     <div>
       <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
         <div>
           <label htmlFor="email">Email:</label>
           <input

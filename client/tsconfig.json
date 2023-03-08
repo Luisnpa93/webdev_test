@@ -1,19 +1,18 @@
 {
-    "compilerOptions": {
-      "target": "es6",
-      "lib": ["dom", "dom.iterable", "esnext"],
-      "module": "esnext",
-      "moduleResolution": "node",
-      "jsx": "react-jsx",
-      "esModuleInterop": true,
-      "allowJs": true,
-      "noImplicitAny": false,
-      "strict": false,
-      "isolatedModules": true,
-      "resolveJsonModule": true,
-      "noEmit": true,
-      "incremental": true
-    },
-    "include": ["src"]
-  }
-  
+  "compilerOptions": {
+    "target": "es6",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "allowJs": true,
+    "noImplicitAny": false,
+    "strict": false,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "incremental": true
+  },
+  "include": ["src"]
+}
