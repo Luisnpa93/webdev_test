@@ -1,0 +1,28 @@
+{
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "postgres",
+    "password": "123456",
+    "database": "clientinfo",
+    "synchronize": true,
+    "logging": true,
+    "entities": [
+      "src/**/*.entity.ts"
+    ],
+    "migrations": [
+      "src/migration/**/*.ts"
+    ],
+    "cli": {
+      "migrationsDir": "src/migration"
+    },
+    "driver": {
+      "type": "postgres",
+      "host": "localhost",
+      "port": 5432,
+      "username": "postgres",
+      "password": "123456",
+      "database": "clientinfo"
+    }
+  }
+  
