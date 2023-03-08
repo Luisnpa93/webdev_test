@@ -14,10 +14,10 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
-const user_service_1 = require("./user/user.service");
 const user_module_1 = require("./user/user.module");
-const signup_controller_1 = require("./signup/signup.controller");
 const database_1 = __importDefault(require("./database"));
+const config_1 = require("@nestjs/config");
+const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -25,9 +25,11 @@ AppModule = __decorate([
         imports: [
             typeorm_1.TypeOrmModule.forRoot(database_1.default),
             user_module_1.UserModule,
+            config_1.ConfigModule,
+            auth_module_1.AuthModule,
         ],
-        controllers: [app_controller_1.AppController, signup_controller_1.SignupController],
-        providers: [app_service_1.AppService, user_service_1.UserService],
+        controllers: [app_controller_1.AppController],
+        providers: [app_service_1.AppService],
     })
 ], AppModule);
 exports.AppModule = AppModule;
