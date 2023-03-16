@@ -24,12 +24,14 @@ function Login() {
     console.log(response);
     if (response.ok) {
       const data = await response.json();
-      const { accessToken } = data;
-      localStorage.setItem('accessToken', accessToken);
-  
+      console.log(data);
+      const { tokenData: { token } } = data;
+      console.log('access token before setting to local storage: ', token);
+      localStorage.setItem('accessToken', token);
+      
       // Send request to get user data
       const userDataResponse = await fetch('http://localhost:3000/users/data', {
-        headers: { 'Authorization': `Bearer ${accessToken}` }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
       
       if (userDataResponse.ok) {
