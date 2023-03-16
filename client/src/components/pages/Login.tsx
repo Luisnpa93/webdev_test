@@ -6,30 +6,44 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     const encodedInfo = btoa(`${email}:${password}`);
     
     const headers = new Headers();
     headers.set('Authorization', `Basic ${encodedInfo}`);
     headers.set('Content-Type', 'application/json');
-
+  
     const response = await fetch('http://localhost:3000/auth/login', {
       method: 'POST',
       headers: headers,
       body: JSON.stringify({ email, password })
     });
-
+  
     console.log(response);
     if (response.ok) {
-      const accessToken = await response.text();
-      navigate('/empty-page')
+      const data = await response.json();
+      const { accessToken } = data;
+      localStorage.setItem('accessToken', accessToken);
+  
+      // Send request to get user data
+      const userDataResponse = await fetch('http://localhost:3000/users/data', {
+        headers: { 'Authorization': `Bearer ${accessToken}` }
+      });
+      
+      if (userDataResponse.ok) {
+        const userData = await userDataResponse.json();
+        const { email, age } = userData;
+        navigate('/userpage', { state: { email, age } });
+      } else {
+        alert('Failed to retrieve user data');
+      }
     } else {
       alert('Login failed');
     }
   };
+  
 
   return (
     <div>
