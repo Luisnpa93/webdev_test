@@ -15,13 +15,14 @@ export class UserService {
 
 
   async createUser(userDto: CreateUserDto): Promise<UserEntity> {
-    const { email, password, age } = userDto;
-    if (!email || !password || !age) {
-      throw new BadRequestException('Email, password, and age are required');
+    const { name, email, password, age } = userDto;
+    if (!name || !email || !password || !age) {
+      throw new BadRequestException('Name, Email, password, and age are required');
     }
   
     const user = new UserEntity();
     user.email = email;
+    user.name = name; 
     await this.generatePassword(password,user);
     user.age = age;
   

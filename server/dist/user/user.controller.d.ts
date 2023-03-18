@@ -10,6 +10,7 @@ export declare class UserController {
     createUser(createUserDto: CreateUserDto): Promise<UserEntity>;
     getUserData(request: any): Promise<{
         id: number;
+        name: string;
         email: string;
         age: number;
     }>;

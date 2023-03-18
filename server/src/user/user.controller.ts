@@ -31,10 +31,11 @@ export class UserController {
    
   @UseGuards(JwtAuthGuard)
 @Get('data')
-async getUserData(@Req() request: any): Promise<{ id: number; email: string; age: number }> {
+async getUserData(@Req() request: any): Promise<{ id: number; name: string; email: string; age: number }> {
   const user = request.user;
-  return { id: user.id, email: user.email, age: user.age };
+  return { id: user.id, name: user.name, email: user.email, age: user.age };
 }
+
 
 
 

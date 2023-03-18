@@ -18,4 +18,7 @@ export class Todo {
 
   @Column({ nullable: false })
   userId: number;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
 }

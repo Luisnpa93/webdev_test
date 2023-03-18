@@ -29,8 +29,15 @@ function TodoList({ userId, tokenn }) {
 
   const handleAddTodo = async () => {
     const newId = todos.length > 0 ? todos[todos.length - 1].id + 1 : 1;
-    const newTodoObj = { id: newId, description: newTodo, userId, status: "not done yet" };
-    
+    const now = new Date().toISOString(); // get the current time in ISO format
+    const newTodoObj = {
+      id: newId,
+      description: newTodo,
+      userId,
+      status: "not done yet",
+      createdAt: now, // add the current time to the new todo object
+    };
+  
     try {
       const response = await fetch('http://localhost:3000/todos', {
         method: 'POST',
@@ -105,16 +112,20 @@ function TodoList({ userId, tokenn }) {
     <div className="todo-list">
       <h2>Todo List</h2>
       <ul>
-        {Array.isArray(todos) && todos.map((todo) => (
-          <li key={todo.id}>
-            {todo.description}
-            <span style={{ color: todo.status === "not done yet" ? "red" : "green", marginLeft: 10 }}>
-              {todo.status}
-            </span>
-            <button onClick={() => handleToggleTodo(todo.id, todo.status)}>Change task status</button>
-            <button onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
-          </li>
-        ))}
+      {Array.isArray(todos) && todos.map((todo) => (
+  <li key={todo.id}>
+    {todo.description}
+    <span style={{ color: todo.status === "not done yet" ? "red" : "green", marginLeft: 10 }}>
+      {todo.status}
+    </span>
+    <span style={{ marginLeft: 10 }}>
+      Created at: {new Date(todo.createdAt).toLocaleString()}
+    </span>
+    <button onClick={() => handleToggleTodo(todo.id, todo.status)}>Change task status</button>
+    <button onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
+  </li>
+))}
+
       </ul>
       <div>
         <input

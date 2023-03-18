@@ -18,12 +18,13 @@ const common_2 = require("@nestjs/common");
 const bcrypt = require("bcrypt");
 let UserService = class UserService {
     async createUser(userDto) {
-        const { email, password, age } = userDto;
-        if (!email || !password || !age) {
-            throw new common_2.BadRequestException('Email, password, and age are required');
+        const { name, email, password, age } = userDto;
+        if (!name || !email || !password || !age) {
+            throw new common_2.BadRequestException('Name, Email, password, and age are required');
         }
         const user = new user_entity_1.UserEntity();
         user.email = email;
+        user.name = name;
         await this.generatePassword(password, user);
         user.age = age;
         await this.userRepository.save(user);

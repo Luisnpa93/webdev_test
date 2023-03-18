@@ -48,7 +48,7 @@ function Userpage() {
     <div>
       {userData && (
         <>
-          <h1>Hello {userData.email}, {userData.age} years old!</h1>
+          <h1>Hello {userData.name}, {userData.age} years old!</h1>
           <button onClick={handleLogout}>Logout</button>
           <button onClick={handleMyList}>My List</button>
           {showList && <TodoList userId={userData.id} tokenn={token} />}
