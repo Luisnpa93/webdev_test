@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserEntity = void 0;
 const typeorm_1 = require("typeorm");
+const todo_entity_1 = require("../todo/todo.entity");
 let UserEntity = class UserEntity {
 };
 __decorate([
@@ -29,6 +30,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], UserEntity.prototype, "age", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => todo_entity_1.Todo, todo => todo.user),
+    __metadata("design:type", Array)
+], UserEntity.prototype, "todos", void 0);
 UserEntity = __decorate([
     (0, typeorm_1.Entity)()
 ], UserEntity);

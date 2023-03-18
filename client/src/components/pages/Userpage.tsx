@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Signup from './Signup';
+import TodoList from './todolist';
 
 function Userpage() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
+  const [showList, setShowList] = useState(false);
+  const [token, setToken] = useState('');
 
   useEffect(() => {
     async function fetchData() {
@@ -20,7 +23,9 @@ function Userpage() {
         }
 
         const data = await response.json();
+        console.log('User data:', data);
         setUserData(data);
+        setToken(localStorage.getItem('accessToken'));
       } catch (error) {
         console.error(error);
         navigate('/login');
@@ -31,27 +36,26 @@ function Userpage() {
 
   const handleLogout = () => {
     // Implement logout logic here, e.g. delete the token and redirect to login page
+    localStorage.removeItem('accessToken');
     navigate('/login')
   };
 
   const handleMyList = () => {
-    navigate('/login')
+    setShowList(true); 
   };
 
   return (
     <div>
-      <h1>Welcome</h1>
       {userData && (
         <>
-          <p>Email: {userData.email}</p>
-          <p>Age: {userData.age}</p>
+          <h1>Hello {userData.email}, {userData.age} years old!</h1>
+          <button onClick={handleLogout}>Logout</button>
+          <button onClick={handleMyList}>My List</button>
+          {showList && <TodoList userId={userData.id} tokenn={token} />}
         </>
       )}
-      <button onClick={handleLogout}>Logout</button>
-      <button onClick={handleMyList}>My List</button>
     </div>
   );
 }
-
 
 export default Userpage;

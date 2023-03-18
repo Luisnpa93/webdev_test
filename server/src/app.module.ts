@@ -10,15 +10,20 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config'; // add this line
 import { ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-
+import { TodosController } from './todo/todos.controller';
+import { TodosService } from './todo/todos.service';
+import { TodosModule } from './todo/todos.module';
+import { Todo } from './todo/todo.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot(config),
+    TypeOrmModule.forFeature([Todo]),
     UserModule,
     ConfigModule, // add this line
     AuthModule, 
+    TodosModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, TodosController],
+  providers: [AppService, TodosService],
 })
 export class AppModule {}

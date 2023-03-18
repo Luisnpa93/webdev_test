@@ -5,7 +5,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link to="/" className="navbar-brand">
-        My App
+        The best WebSite Ever!
       </Link>
       <button
         className="navbar-toggler"
@@ -27,12 +27,12 @@ const Navbar = () => {
           </li>
           <li className="nav-item">
             <Link to="/option-a" className="nav-link">
-              Option A
+              Option A -empty
             </Link>
           </li>
           <li className="nav-item">
             <Link to="/option-b" className="nav-link">
-              Option B
+              Option B -empty
             </Link>
           </li>
           <li className="nav-item">

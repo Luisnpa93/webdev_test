@@ -31,7 +31,7 @@ let UserController = class UserController {
     }
     async getUserData(request) {
         const user = request.user;
-        return { email: user.email, age: user.age };
+        return { id: user.id, email: user.email, age: user.age };
     }
     async getUser(id) {
         return await this.userService.getUser(id);

@@ -9,6 +9,7 @@ export declare class UserController {
     getAllUsers(): Promise<UserEntity[]>;
     createUser(createUserDto: CreateUserDto): Promise<UserEntity>;
     getUserData(request: any): Promise<{
+        id: number;
         email: string;
         age: number;
     }>;

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
+import '../../sass/login.scss';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -37,7 +38,31 @@ function Login() {
       if (userDataResponse.ok) {
         const userData = await userDataResponse.json();
         const { email, age } = userData;
-        navigate('/userpage', { state: { email, age } });
+        navigate('/userpage', { state: { email, age } });<div>
+        <h1>Login</h1>
+        <form onSubmit={handleLogin}>
+          <div>
+            <label htmlFor="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </div>
+          <button type="submit">Submit</button>
+          <Link to="/signup">Sign up</Link>
+        </form>
+      </div>
       } else {
         alert('Failed to retrieve user data');
       }
@@ -48,31 +73,32 @@ function Login() {
   
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
-        <button type="submit">Submit</button>
-        <Link to="/signup">Sign up</Link>
-      </form>
+    <div className="login-container">
+  <h1>Login</h1>
+  <form className="login-form" onSubmit={handleLogin}>
+    <div className="form-input">
+      <label htmlFor="email">Email:</label>
+      <input
+        type="email"
+        id="email"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+      />
     </div>
+    <div className="form-input">
+      <label htmlFor="password">Password:</label>
+      <input
+        type="password"
+        id="password"
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+      />
+    </div>
+    <button type="submit" className="submit-button">Submit</button>
+    <Link to="/signup" className="signup-link">Sign up</Link>
+  </form>
+</div>
+
   );
 };
 
