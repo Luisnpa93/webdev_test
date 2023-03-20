@@ -16,12 +16,10 @@ exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
 const create_user_dto_1 = require("../dto/create-user.dto");
-const jwt_1 = require("@nestjs/jwt");
 const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 let UserController = class UserController {
-    constructor(userService, jwtService) {
+    constructor(userService) {
         this.userService = userService;
-        this.jwtService = jwtService;
     }
     async getAllUsers() {
         return await this.userService.getAllUsers();
@@ -67,8 +65,7 @@ __decorate([
 ], UserController.prototype, "getUser", null);
 UserController = __decorate([
     (0, common_1.Controller)('users'),
-    __metadata("design:paramtypes", [user_service_1.UserService,
-        jwt_1.JwtService])
+    __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserController);
 exports.UserController = UserController;
 //# sourceMappingURL=user.controller.js.map
