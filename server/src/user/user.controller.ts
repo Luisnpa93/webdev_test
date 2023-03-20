@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AuthService } from '../auth/auth.service';
 
@@ -12,7 +12,7 @@ import { AuthService } from '../auth/auth.service';
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly jwtService: JwtService,
+    
     ) {}
 
   

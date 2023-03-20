@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { Todo } from './todo.entity';
 import { TodosService } from './todos.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -26,7 +26,7 @@ export class TodosController {
     return this.todosService.findOne(user.id, +id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   async update(
     @ReqUser() user: UserEntity,
     @Param('id') id: string,

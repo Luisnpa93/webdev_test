@@ -1,64 +1,48 @@
 import { useState, useEffect } from 'react';
 import '../../sass/todolist.scss';
+import jwt_decode from 'jwt-decode';
+import axios from 'axios';
 
-function TodoList({ userId, tokenn }) {
+function TodoList() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
-  const [token, setToken] = useState(tokenn);
 
-  
   useEffect(() => {
     // Fetch todos data from server
     const fetchTodos = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/todos?userId=${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        setTodos(data);
+        const response = await axios.get(`http://localhost:3000/todos`);
+        setTodos(response.data);
       } catch (error) {
         console.error(error);
       }
     };
-
+  
     fetchTodos();
-  }, [token, userId]);
+  }, []);
 
 
   const handleAddTodo = async () => {
     const newId = todos.length > 0 ? todos[todos.length - 1].id + 1 : 1;
     const now = new Date().toISOString(); // get the current time in ISO format
+
     const newTodoObj = {
-      id: newId,
       description: newTodo,
-      userId,
       status: "not done yet",
       createdAt: now, // add the current time to the new todo object
     };
   
     try {
-      const response = await fetch('http://localhost:3000/todos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(newTodoObj),
-      });
-      const data = await response.json();
+      const response = await axios.post('http://localhost:3000/todos', newTodoObj);
+       
+      
+      const data = await response.data;
       setTodos([...todos, data]);
       setNewTodo('');
     } catch (error) {
       console.error(error);
     }
   };
-  
-  
-  
-  
-
   
 
   const handleEditTodo = async (id, newDescription, status) => {
@@ -73,14 +57,8 @@ function TodoList({ userId, tokenn }) {
     );
     setTodos(newTodos);
     try {
-      await fetch(`http://localhost:3000/todos/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ description: newDescription, status }),
-      });
+      await axios.patch(`http://localhost:3000/todos/${id}`, { description: newDescription, status });
+      
     } catch (error) {
       console.error(error);
     }
@@ -91,22 +69,18 @@ function TodoList({ userId, tokenn }) {
     const newTodos = todos.filter((todo) => todo.id !== id);
     setTodos(newTodos);
     try {
-      await fetch(`http://localhost:3000/todos/${id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(`http://localhost:3000/todos/${id}`)
+
     } catch (error) {
       console.error(error);
     }
   };
+  
 
   const handleToggleTodo = async (id, status) => {
     const newStatus = status === "Not done yet" ? "Done" : "Not done yet";
     handleEditTodo(id, todos.find(todo => todo.id === id).description, newStatus);
   }
-  
 
   return (
     <div className="todo-list">
