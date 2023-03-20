@@ -103,7 +103,7 @@ function TodoList({ userId, tokenn }) {
   };
 
   const handleToggleTodo = async (id, status) => {
-    const newStatus = status === "not done yet" ? "done" : "not done yet";
+    const newStatus = status === "Not done yet" ? "Done" : "Not done yet";
     handleEditTodo(id, todos.find(todo => todo.id === id).description, newStatus);
   }
   
@@ -115,7 +115,7 @@ function TodoList({ userId, tokenn }) {
       {Array.isArray(todos) && todos.map((todo) => (
   <li key={todo.id}>
     {todo.description}
-    <span style={{ color: todo.status === "not done yet" ? "red" : "green", marginLeft: 10 }}>
+    <span style={{ color: todo.status === "Not done yet" ? "red" : "green", marginLeft: 10 }}>
       {todo.status}
     </span>
     <span style={{ marginLeft: 10 }}>

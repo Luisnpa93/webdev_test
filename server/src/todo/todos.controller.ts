@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { Todo } from './todo.entity';
 import { TodosService } from './todos.service';
 import { AuthGuard } from '@nestjs/passport';
-import { UnauthorizedException } from '@nestjs/common';
-
+import { CreateTodoDto, UpdateTodoDto } from '../dto/todo.dto';
+import { ReqUser } from '../decorators/user.decorator';
+import { UserEntity } from '../user/user.entity';
 
 @Controller('todos')
 @UseGuards(AuthGuard('jwt'))
@@ -11,43 +12,32 @@ export class TodosController {
   constructor(private readonly todosService: TodosService) {}
 
   @Post()
-  async create(@Req() req, @Body() todo: Todo): Promise<Todo> {
-    const { user } = req;
-    todo.userId = user.id;
-    return this.todosService.create(todo);
+  async create(@ReqUser() user: UserEntity, @Body() createTodoDto: CreateTodoDto): Promise<Todo> {
+    return this.todosService.create(user.id, createTodoDto);
   }
 
   @Get()
-async findAll(@Req() req): Promise<Todo[]> {
-  const { user } = req;
-  if (!user) {
-    throw new UnauthorizedException('User not found');
+  async findAll(@ReqUser() user: UserEntity): Promise<Todo[]> {
+    return this.todosService.findAll(user.id);
   }
-  return this.todosService.findAll(user.id);
-}
-
 
   @Get(':id')
-  async findOne(@Req() req, @Param('id') id: string): Promise<Todo> {
-    const { user } = req;
+  async findOne(@ReqUser() user: UserEntity, @Param('id') id: string): Promise<Todo> {
     return this.todosService.findOne(user.id, +id);
   }
 
   @Put(':id')
-async update(
-  @Req() req,
-  @Param('id') id: string,
-  @Body() todo: Todo,
-): Promise<Todo> {
-  const { user } = req;
-  const { status } = todo;
-  return this.todosService.update(user.id, +id, { ...todo, status });
-}
-
+  async update(
+    @ReqUser() user: UserEntity,
+    @Param('id') id: string,
+    @Body() updateTodoDto: UpdateTodoDto,
+  ): Promise<Todo> {
+    const todo = { ...updateTodoDto, status: updateTodoDto.status || undefined };
+    return this.todosService.update(user.id, +id, todo);
+  }
 
   @Delete(':id')
-  async remove(@Req() req, @Param('id') id: string): Promise<void> {
-    const { user } = req;
+  async remove(@ReqUser() user: UserEntity, @Param('id') id: string): Promise<void> {
     return this.todosService.remove(user.id, +id);
   }
 }
