@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { useMutation } from 'react-query';
 import '../../sass/signup.scss';
-
-
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -13,10 +12,23 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
+  const signup = async (data) => {
+    const response = await axios.post('http://localhost:3000/auth/signup', data);
+    return response.data;
+  };
+
+  const mutation = useMutation(signup, {
+    onSuccess: () => {
+      navigate('/');
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Password validation
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+.])(?!.*\s).{8,}$/;
 
     if (!passwordRegex.test(password)) {
@@ -24,20 +36,9 @@ const Signup = () => {
       return;
     }
 
-    try {
-      const response = await axios.post('http://localhost:3000/auth/signup', {
-        name,
-        email,
-        password,
-        age,
-      });
-      console.log(response.data);
-
-      navigate('/');
-    } catch (error) {
-      console.error(error);
-    }
+    mutation.mutate({ name, email, password, age });
   };
+
 
   return (
     <div className="signup-form">
