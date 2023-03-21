@@ -10,44 +10,32 @@ const NavBar = () => {
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     navigate('/login');
+    window.location.reload(); // reload the page after navigating to /login
   };
+  
 
   return (
     <>
       {user && (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <Link to="/" className="navbar-brand">
-            The best WebSite Ever!
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav mr-auto">
-              <li className="nav-item">
-                <Link to="/option-a" className="nav-link">
-                  Option A -empty
-                </Link>
+        <nav className="bg-light">
+          <div className="container mx-auto">
+            <div className="flex justify-between items-center py-4">
+              <Link to="/" className="text-lg font-bold">
+                The best WebSite Ever!
+              </Link>
+              <button
+                className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
+            <ul className="flex justify-end space-x-8">
+              <li className="text-gray-500 hover:text-gray-600">
+                <Link to="/option-a">Option A - empty</Link>
               </li>
-              <li className="nav-item">
-                <Link to="/option-b" className="nav-link">
-                  Option B -empty
-                </Link>
-              </li>
-            </ul>
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <button className="btn btn-link" onClick={handleLogout}>
-                  Logout
-                </button>
+              <li className="text-gray-500 hover:text-gray-600">
+                <Link to="/option-b">Option B - empty</Link>
               </li>
             </ul>
           </div>
