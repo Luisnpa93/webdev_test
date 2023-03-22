@@ -20,6 +20,8 @@ function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+  const [loginAttempts, setLoginAttempts] = useState(0);
+
 
   const loginUser = async ({ email, password }): Promise<LoginResponse> => {
     const encodedInfo = btoa(`${email}:${password}`);
@@ -67,11 +69,16 @@ function Login() {
     },
     onError: () => {
       alert('Failed to log in');
+      setLoginAttempts((count) => count + 1);
     },
   });
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (loginAttempts >= 3) { // Limit login attempts to 3 per 5 minutes
+      alert('Too many login attempts. Please wait 5 minutes and try again.');
+      return;
+    }
     mutation.mutate({ email, password });
   };
 
