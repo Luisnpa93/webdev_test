@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
@@ -13,35 +13,6 @@ const HomePage = () => {
     const result = await axios.get('http://localhost:3000/');
     return result.data.message;
   });
-
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-
-    const getUserData = async () => {
-      const headers = { Authorization: `Bearer ${token}` };
-      const userDataResponse = await fetch('http://localhost:3000/users/data', { headers });
-
-      if (userDataResponse.ok) {
-        const userData = await userDataResponse.json();
-        setUser(userData);
-      } else {
-        localStorage.removeItem('accessToken');
-        navigate('/login');
-      }
-    };
-
-    getUserData();
-  }, [navigate, setUser]);
-
-  const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    navigate('/login');
-  };
 
   return (
     <div className="bg-gray-100">

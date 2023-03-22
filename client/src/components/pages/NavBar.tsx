@@ -5,12 +5,12 @@ import { UserContext } from '../../context/user.context';
 
 const NavBar = () => {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
-    navigate('/login');
-    window.location.reload(); // reload the page after navigating to /login
+    setUser(null);
+    // reload the page after navigating to /login
   };
   
   return (
