@@ -30,7 +30,16 @@ const App = () => {
       }
     );
 
-    console.log('User is', user);
+    // Check if user is stored in local storage
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Store user in local storage
+    localStorage.setItem('user', JSON.stringify(user));
   }, [user]);
 
   return (
@@ -45,7 +54,6 @@ const App = () => {
                 <Route path="/option-a" element={<OptionA />} />
                 <Route path="/option-b" element={<OptionB />} />
                 <Route path="/signup" element={<Signup />} />
-                
               </Routes>
             </div>
           ) : (
@@ -53,7 +61,6 @@ const App = () => {
               <Route index element={<Login />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              
             </Routes>
           )}
         </Router>
