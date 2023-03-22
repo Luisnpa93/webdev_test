@@ -1,18 +1,10 @@
 import React, { useContext } from 'react';
-import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import TodoList from './todolist';
 import { UserContext } from '../../context/user.context';
 
 const HomePage = () => {
-  const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
-
-  const { isLoading, data: message } = useQuery('homePageMessage', async () => {
-    const result = await axios.get('http://localhost:3000/');
-    return result.data.message;
-  });
+ 
+  const { user } = useContext(UserContext);
 
   return (
     <div className="bg-gray-100">
