@@ -1,65 +1,50 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-
+import { useContext } from 'react';
+import { UserContext } from '../../context/user.context';
 
 const NavBar = () => {
   const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
-    navigate('/login');
+    setUser(null);
+    // reload the page after navigating to /login
   };
-
+  
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Link to="/" className="navbar-brand">
-        The best WebSite Ever!
-      </Link>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
-      <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <Link to="/" className="nav-link">
-              Home
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/option-a" className="nav-link">
-              Option A -empty
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/option-b" className="nav-link">
-              Option B -empty
-            </Link>
-          </li>
-          
-            <li className="nav-item">
-              <button className="nav-link" onClick={handleLogout}>
+    <>
+      {user && (
+        <nav className="bg-gradient-to-r from-blue-500 to-purple-500">
+          <div className="container mx-auto">
+            <div className="flex justify-between items-center py-4">
+              <Link to="/" className="text-2xl font-bold text-white">
+                The best WebSite Ever!
+              </Link>
+              <button
+                className="text-gray-200 hover:text-white focus:outline-none focus:text-white"
+                onClick={handleLogout}
+              >
                 Logout
               </button>
-            </li>
-          
-            <li className="nav-item">
-              <Link to="/login" className="nav-link">
-                Login
-              </Link>
-            </li>
-          
-        </ul>
-      </div>
-    </nav>
+            </div>
+            <ul className="flex justify-end space-x-8">
+              <li>
+                <Link to="/option-a" className="text-gray-200 hover:text-white text-lg font-medium">
+                  Option A
+                </Link>
+              </li>
+              <li>
+                <Link to="/option-b" className="text-gray-200 hover:text-white text-lg font-medium">
+                  Option B
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      )}
+    </>
   );
 };
 

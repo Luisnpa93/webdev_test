@@ -1,7 +1,8 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, NestInterceptor, ExecutionContext, CallHandler, HttpException, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
-
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
@@ -9,6 +10,8 @@ export class AuthService {
   private readonly userService: UserService;
   @Inject(JwtService)
   private readonly jwtService: JwtService;
+
+  constructor() {}
 
   async generateAccessToken(user: { email: string; password: string; }) {
     const { email, password } = user;
@@ -27,7 +30,7 @@ export class AuthService {
         const validated = await this.userService.comparePassword(password, r.password);
         if (!validated) throw Error('Password incorrect');
         if (r) {
-          const access_token = this.jwtService.sign(payload);
+          const access_token = this.jwtService.sign(payload, { expiresIn: '1d' });
           const jwtObj: any = this.jwtService.decode(access_token);
           const user = await this.userService.getUser(r.id);
           return {
@@ -42,7 +45,7 @@ export class AuthService {
         }
       });
     } catch (e) {
-      throw new Error('There was an issue login in');
+      throw new Error('There was an issue logging in');
     }
   }
 
@@ -52,4 +55,22 @@ export class AuthService {
     const userinfo = Buffer.from(token, 'base64').toString('ascii').split(':');
     return { email: userinfo[0], password: userinfo[1] };
   }
+
+  public intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    return next.handle().pipe(
+      catchError((error) => {
+        if (error.response?.status === HttpStatus.UNAUTHORIZED) {
+          if (error.response.data && error.response.data.message === 'Token expired') {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('user');
+          }
+          return throwError(new HttpException('Unauthorized', HttpStatus.SERVICE_UNAVAILABLE));
+        }
+        return throwError(error);
+      }),
+    );
+  }
+  
+  
+
 }
