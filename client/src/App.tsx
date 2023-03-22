@@ -16,10 +16,23 @@ const queryClient = new QueryClient();
 const App = () => {
   const [user, setUser] = useState(null);
 
+  useEffect(() => { 
+    const token = getTokenFromLocalStorage();
+    if(token) { 
+      fetch('http://localhost:3000/users/data', {
+        headers: {Authorization: `Bearer ${token}` },
+      })
+      .then((r) => {
+        setUser(r.json());
+      });
+    }
+
+  }, []);
+
   useEffect(() => {
     axios.interceptors.request.use(
       async (config) => {
-        const token = localStorage.getItem('accessToken');
+        const token = getTokenFromLocalStorage();
         if (token) {
           config.headers['Authorization'] = `Bearer ${token}`;
         }
@@ -28,19 +41,23 @@ const App = () => {
       (error) => {
         return Promise.reject(error);
       }
+    );  
+
+    axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.status === 401) {
+          setUser(null);
+        }
+        return Promise.reject(error);
+      }
     );
-
-    // Check if user is stored in local storage
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-    if (storedUser) {
-      setUser(storedUser);
-    }
-  }, []);
-
-  useEffect(() => {
-    // Store user in local storage
-    localStorage.setItem('user', JSON.stringify(user));
+    
   }, [user]);
+
+  const getTokenFromLocalStorage = () => {
+    return localStorage.getItem('accessToken');
+  };
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
